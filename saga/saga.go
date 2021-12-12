@@ -23,9 +23,9 @@ func NewSaga() *Saga {
 	return &Saga{}
 }
 
-func (s *Saga) GetStep(name string) sagaStep {
+func (s *Saga) GetStep(name StepName) sagaStep {
 	for _, step := range s.allSteps() {
-		if step.Is(name) {
+		if step.Is(string(name)) {
 			return step
 		}
 	}
@@ -125,33 +125,33 @@ func (s *Saga) Done() bool {
 	return (status == StatusFailed || status == StatusSuccess)
 }
 
-func (s *Saga) InitStep(name string, req []byte) bool {
+func (s *Saga) InitStep(name StepName, req []byte) bool {
 	steps := s.allSteps()
 	for i := range steps {
 		step := steps[i]
-		if step.Is(name) {
+		if step.Is(string(name)) {
 			return step.Init(req)
 		}
 	}
 	return false
 }
 
-func (s *Saga) CompleteStep(name string, res []byte) bool {
+func (s *Saga) CompleteStep(name StepName, res []byte) bool {
 	steps := s.allSteps()
 	for i := range steps {
 		step := steps[i]
-		if step.Is(name) {
+		if step.Is(string(name)) {
 			return step.Complete(res)
 		}
 	}
 	return false
 }
 
-func (s *Saga) FailStep(name string, err error) bool {
+func (s *Saga) FailStep(name StepName, err error) bool {
 	steps := s.allSteps()
 	for i := range steps {
 		step := steps[i]
-		if step.Is(name) {
+		if step.Is(string(name)) {
 			return step.Fail(err)
 		}
 	}

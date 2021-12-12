@@ -9,6 +9,8 @@ import (
 
 type StepFn func(ctx context.Context) error
 
+type StepName string
+
 type Step struct {
 	Name   string `json:"name"`
 	Async  bool   `json:"async"`
@@ -19,9 +21,9 @@ type Step struct {
 	*StepStatus
 }
 
-func NewStep(name string, async bool, stepFn StepFn) *Step {
+func NewStep(name StepName, async bool, stepFn StepFn) *Step {
 	return &Step{
-		Name:   name,
+		Name:   string(name),
 		Async:  async,
 		StepFn: stepFn,
 	}
