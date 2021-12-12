@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 )
 
 type StepFn func(ctx context.Context) error
@@ -36,7 +37,7 @@ func (s *Step) IsAsync() bool {
 
 func (s *Step) Exec(ctx context.Context) error {
 	if s.StepStatus == nil {
-		return errors.New("step not initialized")
+		return fmt.Errorf("step not initialized: %s", s.Name)
 	}
 	if !s.Status.CanTransition() {
 		return errors.New("cannot transition from " + s.Status.String())
